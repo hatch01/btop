@@ -112,6 +112,9 @@ bool set_priority(pid_t pid, int priority) {
 			case 5: rng::stable_sort(proc_vec, rng::less{}, &proc_info::mem); 		break;
 			case 6: rng::stable_sort(proc_vec, rng::less{}, &proc_info::cpu_p);		break;
 			case 7: rng::stable_sort(proc_vec, rng::less{}, &proc_info::cpu_c);		break;
+			case 8: rng::stable_sort(proc_vec, rng::less{}, &proc_info::io_read_b);	break;
+			case 9: rng::stable_sort(proc_vec, rng::less{}, &proc_info::io_write_b);	break;
+			case 10: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return (a.io_read_b + a.io_write_b) < (b.io_read_b + b.io_write_b); }); break;
 			}
 		}
 		else {
@@ -124,6 +127,9 @@ bool set_priority(pid_t pid, int priority) {
 			case 5: rng::stable_sort(proc_vec, rng::greater{}, &proc_info::mem); 		break;
 			case 6: rng::stable_sort(proc_vec, rng::greater{}, &proc_info::cpu_p);   	break;
 			case 7: rng::stable_sort(proc_vec, rng::greater{}, &proc_info::cpu_c);   	break;
+			case 8: rng::stable_sort(proc_vec, rng::greater{}, &proc_info::io_read_b);  break;
+			case 9: rng::stable_sort(proc_vec, rng::greater{}, &proc_info::io_write_b); break;
+			case 10: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return (a.io_read_b + a.io_write_b) > (b.io_read_b + b.io_write_b); }); break;
 			}
 		}
 
@@ -153,6 +159,9 @@ bool set_priority(pid_t pid, int priority) {
 				case 5: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().mem < b.entry.get().mem; });	break;
 				case 6: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().cpu_p < b.entry.get().cpu_p; });	break;
 				case 7: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().cpu_c < b.entry.get().cpu_c; });	break;
+				case 8: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().io_read_b < b.entry.get().io_read_b; }); break;
+				case 9: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().io_write_b < b.entry.get().io_write_b; }); break;
+				case 10: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return (a.entry.get().io_read_b + a.entry.get().io_write_b) < (b.entry.get().io_read_b + b.entry.get().io_write_b); }); break;
 				}
 			}
 			else {
@@ -161,6 +170,9 @@ bool set_priority(pid_t pid, int priority) {
 				case 5: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().mem > b.entry.get().mem; });	break;
 				case 6: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().cpu_p > b.entry.get().cpu_p; });	break;
 				case 7: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().cpu_c > b.entry.get().cpu_c; });	break;
+				case 8: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().io_read_b > b.entry.get().io_read_b; }); break;
+				case 9: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return a.entry.get().io_write_b > b.entry.get().io_write_b; }); break;
+				case 10: rng::stable_sort(proc_vec, [](const auto& a, const auto& b) { return (a.entry.get().io_read_b + a.entry.get().io_write_b) > (b.entry.get().io_read_b + b.entry.get().io_write_b); }); break;
 				}
 			}
 		}
@@ -311,3 +323,4 @@ auto detect_container() -> std::optional<std::string> {
 
     return std::nullopt;
 }
+
